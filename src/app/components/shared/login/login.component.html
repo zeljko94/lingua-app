@@ -1,0 +1,51 @@
+
+<body class="hold-transition login-page pozadina" (keydown)="keyDownFunction($event)">
+    <div class="login-box">
+      <div class="login-logo">
+        <img src="assets/template/dist/img/logo-lingua.png" width="70%">
+      </div>
+      <!-- /.login-logo -->
+      <div class="login-box-body">
+        <p class="login-box-msg">- DOBRODOŠLI -<br><br></p>
+    
+        <ng-container (keyup.enter)="login()">
+          <div [ngClass]="email !='' ?'form-group has-feedback': 'form-group has-error has-feedback'">
+            <input type="email" class="form-control" placeholder="E-mail" [(ngModel)]="email">
+            <p *ngIf="!(email != '')" class="text-red">Unesite email!</p>
+            <p *ngIf="isEmailTaken && email != ''"class="text-red">Zauzet e-mail!</p>
+          </div>
+          <div [ngClass]="password !='' ?'form-group has-feedback': 'form-group has-error has-feedback'">
+            <input type="password" class="form-control" placeholder="Password" [(ngModel)]="password">
+            <p *ngIf="!(password != '')"class="text-red">Unesite password!</p>
+          </div>
+          <div class="row">
+            <div class="col-xs-8">
+              <div class="checkbox icheck">
+                <label style="margin-left:20px;">
+                  <input type="checkbox"> Zapamti me
+                </label>
+              </div>
+            </div>
+            <!-- /.col -->
+            <div class="col-xs-4">
+              <button type="button" (click)="login()" class="btn btn-primary btn-block">Prijavi se</button>
+            </div>
+            <!-- /.col -->
+          </div>
+        </ng-container>
+
+   
+        
+      </div>
+      <div class="text-center">
+      <a [routerLink]="" (click)="forgotPass()" class="lozinka"><b>Zaboravili ste lozinku ?</b></a><br>
+      </div>
+      <!--<a href="register.html" class="text-center">Become a member</a>-->
+  
+      <!-- /.login-box-body -->
+    </div>
+    <!-- /.login-box -->
+    <br><br><br><br><br><br><br>
+    
+    </body>
+   

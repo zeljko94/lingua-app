@@ -1,0 +1,111 @@
+
+              <!-- ADD FORM -->
+              <div class="row">
+                <div class="col-xs-12">
+                  <div class="box" *ngIf="mode != ''">
+                      <div class="box-header with-border">
+                        <h1 class="box-title font-opcenito" *ngIf="mode == 'Add'"><b>Dodaj učionicu</b></h1>
+                        <h1 class="box-title font-opcenito" *ngIf="mode == 'Update'"><b>Izmjeni učionicu</b></h1>
+                        
+                        <div class="box-tools pull-right">
+                            <button type="button" (click)="changeMode('', null)" class="btn btn-box-tool"><i class="fa fa-times"></i></button>
+                        </div>
+                      </div>
+                      <form class="form-horizontal">
+
+                        <div class="box-body">
+                          <div [ngClass]="object.naziv == '' ? 'form-group has-error has-feedback' : 'form-group'">
+                            <label for="naziv" class="col-sm-2 control-label">Naziv &nbsp;<i class="fa fa-map-signs" aria-hidden="true"></i></label>
+                            <div class="col-sm-3">
+                              <input [(ngModel)]="object.naziv" class="form-control" name="naziv" placeholder="Naziv učionice..." type="text">
+                              <p *ngIf="object.naziv == ''" style="color: red;">Unesite naziv učionice!</p>
+                            </div>
+                          </div>
+
+                          <div [ngClass]="object.opis == '' ? 'form-group has-error has-feedback' : 'form-group'">
+                              <label for="opis" class="col-sm-2 control-label">Opis &nbsp;<i class="fa fa-info-circle" aria-hidden="true"></i></label>
+                              <div class="col-sm-3">
+                                <input [(ngModel)]="object.opis" class="form-control" name="opis" placeholder="Opis učionice..." type="text">
+                                <p *ngIf="object.opis == ''" style="color: red;">Unesite opis učionice! </p>
+                              </div>
+                          </div>
+
+                          <div [ngClass]="object.color == '' ? 'form-group has-error has-feedback' : 'form-group'">
+                              <label for="color" class="col-sm-2 control-label">Boja &nbsp;<i class="fa fa-paint-brush" aria-hidden="true"></i></label>
+                              <div class="col-sm-3">
+                                <input type="text" class="form-control" [value]="object.color" [(colorPicker)]="object.color" [style.background]="object.color" />
+                                <p *ngIf="object.color == ''" style="color: red;">Odaberite boju učionice!</p>
+                              </div>
+                              <button class="btn btn-default" style="margin-left: 25px;" (click)="toClipboard(object.color)">
+                                <i class="fa fa-clipboard"></i>
+                                &nbsp;&nbsp;
+                                Copy to clipboard
+                              </button>
+                          </div>
+                        </div>
+                        <!-- /.box-body -->
+                        <div class="box-footer">
+                          <button type="button" (click)="spremi()" class="btn btn-success" style="margin-right: 10px;"><i class="fa fa-save"></i>&nbsp; Spremi</button>
+                          <button type="button" (click)="object={}" class="btn btn-danger"><i class="fa fa-undo"></i>&nbsp; Poništi</button>
+                        </div>
+                        <!-- /.box-footer -->
+                      </form>
+                    </div>
+
+                </div>
+              </div>
+              <!-- ADD/EDIT FORM END -->
+
+              <div class="row">
+                <div class="col-xs-2">
+                    <button type="button" class="btn btn-default" (click)="changeMode('Add', null)"><i class="	fa fa-edit" ></i> Dodaj učionicu</button>
+                </div>
+                
+              </div>
+              <br>
+
+
+
+
+
+        <div class="box">
+          
+        <!-- /.box-header -->
+        <div class="box-body">
+          <table id="razineNastaveTable" class="table table-bordered table-hover table-striped">
+                <tbody>
+                  <tr >
+                      <th class="text-center">Br.</th>
+                      <th class="text-center">Naziv</th>
+                      <th class="text-center">Opis</th>
+                      <th class="text-center" style="width:10%;">Boja</th>
+                      <th *ngIf="loggedUserPrivileges == 'admin'"></th>
+                      <!--<th class="text-center"><input type="checkbox" [(ngModel)]="checkAll" (change)="checkAllOnChange()" name="check-all" /></th>-->
+                  </tr>
+            <tr *ngFor="let rn of ucionice; let i = index" class="text-center" (click)="changeMode('Update',rn)">
+              <!--<td class="text-center" style="width: 3%;">{{((this.paginator.ps.currentPage-1) * this.paginator.ps.pageSize) + (i+1)}}.</td>-->
+              <td  style="width: 3%;" >{{i+1}}.</td>
+              <td >{{rn.naziv}}</td>
+              <td >{{rn.opis}}</td>
+              <td align="center" style="width: 18%;">
+                <div style="width: 50px;height: 30px;" [style.background]="rn.color"></div>
+                <span style="font-size:10px;">{{rn.color}}</span><br>
+              </td>
+              <td *ngIf="loggedUserPrivileges == 'admin'" style="width: 14%;" class="text-center">
+                  <div class="btn-group">
+                      <button (click)="$event.stopPropagation();brisi(rn.id)" type="button" class="btn btn-danger"><i class="fa fa-trash"></i>&nbsp; Briši</button>
+                  </div>
+              </td>
+              <!--<td  class="text-center"><input type="checkbox" [value]="rn.ID" (change)="$event.stopPropagation()" name="data-checkbox" /></td>-->
+            </tr>
+            
+            </tbody>
+            
+          </table>
+        </div>
+        <!-- /.box-body -->
+        <div class="box-footer">
+          <!--<app-pagination #paginator></app-pagination>-->
+        </div>
+      </div>
+      <!-- /.box -->

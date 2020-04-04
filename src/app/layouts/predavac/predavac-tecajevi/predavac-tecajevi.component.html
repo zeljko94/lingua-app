@@ -1,0 +1,185 @@
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1 class="font-opcenito">Tečajevi
+        <small>Upravljanje tečajevima</small>
+      </h1>
+  
+      <ol class="breadcrumb">
+          <li><a [routerLink]="['/admin/dashboard']"><i class="fa fa-dashboard"></i> Nadzorna ploča</a></li>
+          <li class="active">Tečajevi</li>
+      </ol>
+    </section>
+  
+  
+     <!-- Main content -->
+     <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+
+          <!--<p>{{ getJSON() }}</p>-->
+              <!-- ADD FORM -->
+              <div class="row">
+                  <div class="col-xs-12">
+                    <div class="box" *ngIf="mode != ''">
+                        <div class="box-header with-border">
+                          <h1 class="box-title font-opcenito" *ngIf="mode == 'Add'"><b>Dodaj tečaj</b></h1>
+                          <h1 class="box-title font-opcenito" *ngIf="mode == 'Update'"><b>Izmjeni tečaj</b></h1>
+  
+                          <div class="box-tools pull-right">
+                              <button type="button" (click)="changeMode('', {})" class="btn btn-box-tool"><i class="fa fa-times"></i></button>
+                          </div>
+                        </div>
+                        <form class="form-horizontal">
+  
+                          <div class="box-body text-left">
+                            <div [ngClass]="object.naziv == '' ? 'form-group has-error has-feedback' : 'form-group'">
+                              <label for="naziv" class="col-sm-2 control-label">Naziv:</label>
+                              <div class="col-sm-5">
+                                <input [(ngModel)]="object.naziv" class="form-control" name="naziv" placeholder="Naziv tečaja..." type="text">
+                                
+                                
+                                <ng-container *ngIf="object.naziv == ''">
+                                    <label class="control-label error-label" for="inputError">
+                                        <i class="fa fa-times-circle-o"></i> 
+                                        Unesite naziv tečaja!
+                                      </label>
+                                      <br>
+                                </ng-container>
+                              </div>
+                            </div>
+  
+                            <div [ngClass]="object.Opis == '' ? 'form-group has-error has-feedback' : 'form-group'">
+                              <label for="opis" class="col-sm-2 control-label">Opis:</label>
+                              <div class="col-sm-5">
+                                <input [(ngModel)]="object.opis" class="form-control" name="opis" placeholder="Opis tečaja..." type="text">
+                              </div>
+                            </div>
+
+                            
+                            
+                            <div class="form-group">
+                                <label for="opis" class="col-sm-2 control-label">Vještina:</label>
+                                <div class="col-sm-3">
+                                    <select class="form-control" name="vjestinaID" [(ngModel)]="object.vjestinaID" (change)="jezikChange()">
+                                        <option value="-1">Odaberite jezik...</option>
+                                        <option *ngFor="let j of jezici" value="{{j.id}}">{{j.naziv}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                                 
+
+                                                 
+                            <div class="form-group">
+                                <label for="opis" class="col-sm-2 control-label">Razina:</label>
+                                <div class="col-sm-3">
+                                    <select class="form-control" name="razinaNastaveID" [(ngModel)]="object.razinaNastaveID">
+                                        <option value="-1">Odaberite  razinu...</option>
+                                        <option *ngFor="let r of razine" value="{{r.id}}">{{r.naziv}}</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="opis" class="col-sm-2 control-label">Tip nastave:</label>
+                                <div class="col-sm-3">
+                                    <select class="form-control" name="tipNastaveID" [(ngModel)]="object.tipNastaveID">
+                                        <option value="-1">Odaberite tip nastave...</option>
+                                        <option *ngFor="let tn of tipoviNastave" value="{{tn.id}}">{{tn.naziv}}</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                                                                       
+                            <div class="form-group">
+                                <label for="opis" class="col-sm-2 control-label">Učenici:</label>
+                                <div class="col-sm-10">
+                                    <dual-list [source]="source" [(destination)]="destination" [format]="format" [display]="dualListDisplay" [key]="'id'" [height]="5" (destinationChange)="destinationChange($event)"></dual-list>
+                                </div>
+                            </div>
+                          </div>
+                          <!-- /.box-body -->
+                          <div class="box-footer">
+                            <button type="button" (click)="spremi()" class="btn btn-success" style="margin-right: 10px;"><i class="fa fa-save"></i>&nbsp; Spremi</button>
+                            <button type="button" (click)="object={}" class="btn btn-danger"><i class="fa fa-undo"></i>&nbsp; Poništi</button>
+                          </div>
+                          <!-- /.box-footer -->
+                        </form>
+                      </div>
+  
+                  </div>
+                </div>
+                <!-- ADD/EDIT FORM END -->
+  
+                <div class="row">
+                  <div class="col-xs-2">
+                    <button type="button" class="btn btn-default" (click)="changeMode('Add', {})"><i class="fa fa-language" aria-hidden="true"></i>&nbsp; Dodaj tečaj</button>
+                  </div>
+                  
+                </div>
+                <br>
+  
+          <div class="box">
+              
+            <!-- /.box-header -->
+            <div class="box-body">
+              <table id="tecajeviTable" class="table table-bordered table-hover table-striped">
+                <tbody>
+                  <tr class="text-center">
+                      <th>Br.</th>
+                      <th>Naziv</th>
+                      <th>Opis</th>
+                      <th>Vještina</th>
+                      <th>Razina</th>
+                      <th>Tip nastave</th>
+                      <th style="width: 7%;"></th>
+                      <th style="width: 7%;"></th>
+                      <!--<th class="text-center"><input type="checkbox" [(ngModel)]="checkAll" (change)="checkAllOnChange()" name="check-all" /></th>-->
+                  </tr>
+  
+                  <tr *ngFor="let rn of tecajevi; let i = index" (click)="changeMode('Update',rn)">
+                    <!--<td class="text-center" style="width: 3%;">{{((this.paginator.ps.currentPage-1) * this.paginator.ps.pageSize) + (i+1)}}.</td>-->
+                    <td class="text-center" style="width: 3%;" >{{i+1}}.</td>
+                    <td >{{rn.naziv}}</td>
+                    <td>{{rn.opis}}</td>
+                    <td><span [ngClass]="rn.vjestina.icon"></span>{{rn.vjestina.naziv}}</td>
+                    <td>{{rn.razina_nastave.naziv}}</td>
+                    <td>{{rn.tip_nastave.naziv}}</td>
+                    <td style="width: 7%;" class="text-center">
+                        <div class="btn-group">
+                            <button (click)="$event.stopPropagation();detalji(rn.id)" type="button" class="btn btn-primary"><i class="fa fa-info-circle"></i>&nbsp; Detalji</button>
+                        </div>
+                    </td>
+                    <td style="width: 7%;" class="text-center">
+                        <div class="btn-group">
+                            <button (click)="$event.stopPropagation();brisi(rn.id)" type="button" class="btn btn-danger"><i class="fa fa-trash"></i>&nbsp; Briši</button>
+                        </div>
+                    </td>
+                    <!--<td  class="text-center"><input type="checkbox" [value]="rn.ID" (change)="$event.stopPropagation()" name="data-checkbox" /></td>-->
+                  </tr>
+                
+                </tbody>
+                
+              </table>
+            </div>
+            <!-- /.box-body -->
+  
+            <div class="box-footer">
+                <!--<app-pagination #paginator></app-pagination>-->
+            </div>
+          </div>
+          <!-- /.box -->
+          
+          
+  
+      </div>
+      <!-- /.tab-pane -->
+    </div>
+  <!-- /.control-sidebar -->
+  <!-- Add the sidebar's background. This div must be placed
+       immediately after the control sidebar -->
+  <div class="control-sidebar-bg"></div>
+  
+  
