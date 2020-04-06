@@ -28,6 +28,9 @@ export class UnosTerminaComponent implements OnInit {
                private swal: SwalService) { }
  
    ngOnInit() {
+    this.termin.tecaj_id = '0';
+    this.termin.ucionica_id = '0';
+
     this.http.getAll('ucionice')
        .subscribe(data => {
          this.ucionice = data;
@@ -38,35 +41,33 @@ export class UnosTerminaComponent implements OnInit {
        
     this.http.getAll('tecajevi')
        .subscribe(data => {
-           this.tecajevi = data.Data;
-           if(this.auth.getPrivileges() == 'predavac'){
-             this.tecajevi = this.tecajevi.filter(t => t.predavac.id == this.auth.getUser().id);
-           }
+          this.tecajevi = data;
+       },
+       err => {
+
        });
-     this.termin.NastavaID = this.nastava ? 0 : this.nastavaID;
-     this.termin.UcionicaID = '0';
    }
  
    addTermin(){
-     let termin = {
-       pocetniDatum: moment(new Date().toString()).format('YYYY-MM-DD HH:mm:ss'),
-       zavrsniDatum: moment(new Date().toString()).format('YYYY-MM-DD HH:mm:ss'),
-       title: 'Naslov eventa',
-       user_id: 1,
-       ucionica_id: 1,
-       tecaj_id: 1
-     };
-     console.log(termin);
-
-     this.http.post('termini', termin)
-      .subscribe(
-        data => {
-          console.log(data);
-        },
-        err => {
-          console.log(err);
-        }
-      );
+     if(this.isInputValid()){
+      this.termin = {
+        pocetniDatum: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
+        zavrsniDatum: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
+        title: 'Naslov eventa',
+        user_id: 1,
+        ucionica_id: 1,
+        tecaj_id: 1
+      };
+ 
+      this.http.post('termini', this.termin)
+       .subscribe(
+         data => {
+           this.addEmitter.emit(data);
+         },
+         err => {
+         }
+       );
+     }
      /*
      if(this.isInputValid()){
        this.http.post("TerminNastava/IsSlobodanTermin", this.termin)
@@ -101,30 +102,29 @@ export class UnosTerminaComponent implements OnInit {
      }*/
    }
  
-   isInputValid(swal = true){/*
-     if(this.termin.UcionicaID != '0'){
-       if(this.termin.PocetniDatum > Date.now() && this.termin.ZavrsniDatum > Date.now()){
-         if(this.termin.PocetniDatum <= this.termin.ZavrsniDatum){
- 
-           // SUCCESS
-           return true;
-         }
-         else{
-           if(swal)
-             this.swal.err("Greška sa datumima!");
-           return false;
-         }
-       }
-       else{
-         if(swal)
-           this.swal.err("Greška sa datumima!");
-       }
-     }
-     else{
-       if(swal)
-         this.swal.err("Odaberite učionicu!");
-       return false;
-     }*/
+   isInputValid(){
+     
+    if(this.termin.ucionica_id != '0'){
+      if(this.termin.tecaj_id != '0'){
+        if(this.termin.pocetniDatum > Date.now() && this.termin.zavrsniDatum > Date.now()){
+          if(this.termin.pocetniDatum <= this.termin.zavrsniDatum){
+            return true;
+          }
+          else {
+            this.swal.err("Greška s datumima!");
+          }
+        }
+        else {
+          this.swal.err("Greška s datumima!");
+        }
+      }
+      else {
+        this.swal.err("Odaberite tečaj!");
+      }
+    }
+    else {
+      this.swal.err("Odaberite učionicu!");
+    }
    }
 
 }

@@ -13,11 +13,11 @@
       <div class="box-body" style="padding-left:30px; padding-right: 30px">
         <form class="form-horizontal">
 
-          <div [ngClass]="termin.UcionicaID == '0' ? 'form-group has-error has-feedback': 'form-group'">
+          <div [ngClass]="termin.ucionica_id == '0' ? 'form-group has-error has-feedback': 'form-group'">
             <label for="ucionica">Učionica:</label>
-            <select class="form-control" name="UcionicaID" [(ngModel)]="termin.UcionicaID" (change)="onChange()">
+            <select class="form-control" name="ucionica_id" [(ngModel)]="termin.ucionica_id" (change)="onChange()">
               <option value="0">Odaberite učionicu...</option>
-              <option *ngFor="let u of ucionice" [value]="u.ID">{{u.Naziv}}</option>
+              <option *ngFor="let u of ucionice" [value]="u.id">{{u.naziv}}</option>
             </select>
 
             <ng-container *ngIf="termin.UcionicaID == '0'">
@@ -29,18 +29,18 @@
             </ng-container>
           </div>
 
-          <div *ngIf="nastava" [ngClass]="termin.NastavaID == '0' ? 'form-group has-error has-feedback': 'form-group'">
+          <div *ngIf="nastava" [ngClass]="termin.tecaj_id == '0' ? 'form-group has-error has-feedback': 'form-group'">
               <label for="nastava">Nastava:</label>
-              <select class="form-control" name="NastavaID" [(ngModel)]="termin.NastavaID" (change)="onChange()">
+              <select class="form-control" name="tecaj_id" [(ngModel)]="termin.tecaj_id" (change)="onChange()">
                 <option value="0">Odaberite nastavu...</option>
-                <option *ngFor="let t of tecajevi" [value]="t.ID">{{t.Naziv}}</option>
+                <option *ngFor="let t of tecajevi" [value]="t.id">{{t.naziv}}</option>
                 <!--
                 <ng-container *ngIf="auth.isAdmin()"><option *ngFor="let t of tecajeviStore.tecajevi" [value]="t.ID">{{t.Naziv}}</option></ng-container>
                 <ng-container *ngIf="auth.isPredavac()"><option *ngFor="let t of tecajeviStore.predavacTecajevi" [value]="t.ID">{{t.Naziv}}</option></ng-container>
                 -->
               </select>
   
-              <ng-container *ngIf="termin.NastavaID == '0'">
+              <ng-container *ngIf="termin.nastava_id == '0'">
                   <label class="control-label error-label" for="inputError">
                       <i class="fa fa-times-circle-o"></i> 
                       Odaberite nastavu!

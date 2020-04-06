@@ -52,7 +52,11 @@ export class AdminCalendarComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(){
     
     this.unosTerminaComponent.addEmitter.subscribe(data => {
-      this.events.push(data);
+      this.events.push({
+        title: data.title,
+        start: data.pocetniDatum,
+        end: data.zavrsniDatum
+      });
       (<any>$('#myCal')).fullCalendar('removeEvents');
       (<any>$('#myCal')).fullCalendar('addEventSource', this.events);
       (<any>$('#myCal')).fullCalendar('refetchEvents');
@@ -60,10 +64,17 @@ export class AdminCalendarComponent implements OnInit, AfterViewInit {
 
     let self = this;
     this.swal.showLoading("Učitavanje podataka...", false);
-    this.http.getAll('ucionice') // < --------------------------
+    this.http.getAll('termini') // < --------------------------
       .subscribe(data => {
         this.swal.hideLoading();
-        this.events = [];//data;
+        this.events = [];
+        for(var i=0; i< data.length; i++){
+          this.events.push({
+            title: data[i].title,
+            start: data[i].pocetniDatum,
+            end: data[i].zavrsniDatum
+          });
+        }
         
         (<any>$('#myCal')).fullCalendar({
           locale: 'hr',
@@ -127,6 +138,7 @@ export class AdminCalendarComponent implements OnInit, AfterViewInit {
         });
 
         (<any> $('#myCal')).fullCalendar("addEventSource", this.events);
+        (<any>$('#myCal')).fullCalendar('refetchEvents');
       });
 
   }
