@@ -24,7 +24,7 @@
     "@types/jquery": "^3.3.32",
     "angular-dual-listbox": "^5.0.1",
     "fullcalendar": "^3.10.1",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "moment": "^2.24.0",
     "ng-pick-datetime": "^5.2.6",
     "ngx-color-picker": "^9.0.0",
